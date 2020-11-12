@@ -3,16 +3,16 @@ import java.io.Serializable;
 public class MachinesProtocol implements Serializable {
   private static final long serialVersionUID = 2496508428440758311L;
   private String message;
-  private Integer destination;
+  private int destination;
   private Boolean isSendingToken;
 
-  public MachinesProtocol(String message, Integer destination) {
+  public MachinesProtocol(String message, int destination) {
     this.message = message;
     this.destination = destination;
     this.isSendingToken = false;
   }
 
-  public MachinesProtocol(Integer destination) {
+  public MachinesProtocol(int destination) {
     this.message = null;
     this.destination = destination;
     this.isSendingToken = true;
@@ -22,7 +22,7 @@ public class MachinesProtocol implements Serializable {
     return this.message;
   }
 
-  public Integer getDestination() {
+  public int getDestination() {
     return this.destination;
   }
 
@@ -32,7 +32,7 @@ public class MachinesProtocol implements Serializable {
 
   @Override
   public String toString() {
-    return "message: " + this.message + "\ndestination: " + this.destination.toString() + "\nisSendingToken: "
-        + this.isSendingToken.toString();
+    return "message: " + this.message + "\ndestination: " + ((Integer) this.destination).toString()
+        + "\nisSendingToken: " + this.isSendingToken.toString();
   }
 }

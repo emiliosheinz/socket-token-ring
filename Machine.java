@@ -7,8 +7,8 @@ class Machine {
   public static void main(String[] args) {
     try {
       Boolean isHost;
-      Integer nextServer;
-      Integer ownServer;
+      int nextServer;
+      int ownServer;
       Socket clientSocket = null;
       Socket connectionSocket = null;
       ServerSocket serverSocket = null;
@@ -47,9 +47,9 @@ class Machine {
       while (true) {
         if (isHost) {
           System.out.println("O que você gostaria de fazer?\n1. Enviar uma mensagem\n2. Enviar o token\n3. Sair");
-          Integer choice = Integer.parseInt(fromUser.readLine());
+          int choice = Integer.parseInt(fromUser.readLine());
 
-          Integer targetServer;
+          int targetServer;
           MachinesProtocol data;
 
           switch (choice) {
@@ -72,8 +72,15 @@ class Machine {
               isHost = false;
               break;
             case 3:
-              toServer.writeBytes("Sair\n");
+              toServer.writeObject(null);
+              clientSocket.close();
+              serverSocket.close();
               break;
+          }
+
+          if (choice == 3) {
+            System.out.println("Fechando servidor...");
+            break;
           }
 
           fromClient.readObject();
@@ -81,7 +88,13 @@ class Machine {
           System.out.println("Aguardando dados...");
           MachinesProtocol data = (MachinesProtocol) fromClient.readObject();
 
-          if (data.getDestination().equals(ownServer)) {
+          if (data == null) {
+            System.out.println("Fechando servidor...");
+            toServer.writeObject(data);
+            clientSocket.close();
+            serverSocket.close();
+            break;
+          } else if (data.getDestination() == ownServer) {
             if (data.getIsSendingToken()) {
               System.out.println("Token recebido com sucesso!");
               isHost = true;
